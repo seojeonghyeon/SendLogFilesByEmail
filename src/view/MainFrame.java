@@ -10,6 +10,7 @@ public class MainFrame extends JFrame{
     private JFrame mainFrame;
     private Image logImage;
     private Container contentPane;
+    private String defaultFontName = "Courier New";
 
     private MainFrame(){
         createMainFrame();
@@ -38,15 +39,17 @@ public class MainFrame extends JFrame{
         contentPane = getContentPane();
         contentPane.setLayout(null);
 
+        Image titleImage = new ImageIcon("/resource/profile.jpeg").getImage();
+
         TextLabel[] textLabels = new TextLabel[]{
-                new TextLabel("Location : ", 30, 30, 200, 20,
-                        "Serif", 20, Color.BLACK),
-                new TextLabel("송신 메일 주소 : ", 30, 60, 200, 20,
-                        "Serif", 20, Color.BLACK),
-                new TextLabel("Password : ", 30, 90, 200, 20,
-                        "Serif", 20, Color.BLACK),
-                new TextLabel("수신 메일 주소 : ", 30, 120, 200, 20,
-                        "Serif", 20, Color.BLACK)
+                new TextLabel("Location : ", 30, 150, 200, 20,
+                        defaultFontName, 20, Color.BLACK),
+                new TextLabel("송신 메일 주소 : ", 30, 180, 200, 20,
+                        defaultFontName, 20, Color.BLACK),
+                new TextLabel("Password : ", 30, 210, 200, 20,
+                        defaultFontName, 20, Color.BLACK),
+                new TextLabel("수신 메일 주소 : ", 30, 240, 200, 20,
+                        defaultFontName, 20, Color.BLACK)
         };
 
         for (int i=0; i<textLabels.length; ++i){
