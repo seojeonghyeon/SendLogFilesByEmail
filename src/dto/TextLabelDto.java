@@ -1,8 +1,8 @@
-package model;
+package dto;
 
 import java.awt.*;
 
-public class TextLabel {
+public class TextLabelDto {
     private String text;
     private int locationX;
     private int locationY;
@@ -12,8 +12,8 @@ public class TextLabel {
     private int textFontSize;
     private Color textFontColor;
 
-    public TextLabel(String text, int locationX, int locationY, int sizeWidth, int sizeHeight, String textFont,
-                     int textFontSize, Color textFontColor){
+    public TextLabelDto(String text, int locationX, int locationY, int sizeWidth, int sizeHeight, String textFont,
+                        int textFontSize, Color textFontColor){
         this.text = text;
         this.locationX = locationX;
         this.locationY = locationY;
