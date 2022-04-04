@@ -1,5 +1,7 @@
 package view;
 
+import controller.FileController;
+import dto.TextFieldDto;
 import dto.TextLabelDto;
 
 import javax.swing.*;
@@ -10,6 +12,8 @@ public class MainFrame extends JFrame{
     private JFrame mainFrame;
     private Image logImage;
     private Container contentPane;
+
+    private FileController fileController;
 
     private static final int defaultWindowSizeWidth = 500;
     private static final int defaultWindowSizeHeight = 500;
@@ -22,7 +26,21 @@ public class MainFrame extends JFrame{
     private static final String titleName = "Send Log Files By Email";
     private static final String logoIconLocation = "/resource/profile.jpeg";
 
+    private static final int countTextField = 5;
+
+    private TextLabelDto[] textLabelDtos;
+    private int[][] textFieldSet;
+    private TextFieldDto[] textFieldDtos;
+
     private MainFrame(){
+        try {
+            fileController = new FileController();
+            textFieldDtos = fileController.readSaveFile(countTextField);
+            wait(1000);
+        }catch (InterruptedException e){
+            System.out.println(e);
+        }
+        System.out.println("hi");
         createMainFrame();
         createMainPanel();
     }
@@ -49,7 +67,7 @@ public class MainFrame extends JFrame{
         contentPane = getContentPane();
         contentPane.setLayout(null);
 
-        TextLabelDto[] textLabels = new TextLabelDto[]{
+        textLabelDtos = new TextLabelDto[]{
                 new TextLabelDto("Location    : ", 30, 50, 800, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
                 new TextLabelDto("송신 메일 주소 : ", 30, 100, 800, 20,
@@ -64,21 +82,51 @@ public class MainFrame extends JFrame{
                         defaultFontName, defaultFontSize, defaultFontColor)
         };
 
-        for (int i=0; i<textLabels.length; ++i){
-            JLabel jLabel = createLabel(textLabels[i]);
-            System.out.println(textLabels[i].toString());
+        // locationX, locationY, sizeWidth, sizeHeight
+        textFieldSet = new int[][]{
+                new int[]{ 100, 50, 800, 20 },
+                new int[]{ 100, 100, 800, 20 },
+                new int[]{ 100, 150, 800, 20 },
+                new int[]{ 100, 200, 800, 20 },
+                new int[]{ 60, 250, 800, 20}
+        };
+
+        for(int i=0; i<countTextField; ++i){
+            textFieldDtos[i].setTextFieldDtoExceptTextValue(
+                    textFieldSet[i][0], textFieldSet[i][1], textFieldSet[i][2], textFieldSet[i][3],
+                    defaultFontName, defaultFontSize, defaultFontColor);
+            System.out.println(textFieldDtos[i].toString());
+        }
+
+        for (int i=0; i<textLabelDtos.length; ++i){
+            JLabel jLabel = createLabel(textLabelDtos[i]);
             contentPane.add(jLabel);
+        }
+
+        for (int i=0; i<textFieldDtos.length; ++i){
+            JTextField jTextField = createTextField(textFieldDtos[i]);
+            contentPane.add(jTextField);
         }
 
 
         setVisible(true);
     }
+
     private JLabel createLabel(TextLabelDto textLabel){
         JLabel jLabel = new JLabel(textLabel.getText());
         jLabel.setLocation(textLabel.getLocationX(), textLabel.getLocationY());
         jLabel.setSize(textLabel.getSizeWidth(), textLabel.getSizeHeight());
         jLabel.setFont(new Font(textLabel.getTextFont(), Font.PLAIN, textLabel.getTextFontSize()));
         return jLabel;
+    }
+
+    private JTextField createTextField(TextFieldDto textFieldDto){
+        JTextField jTextField = new JTextField();
+        jTextField.setText(textFieldDto.getTextValue());
+        jTextField.setLocation(textFieldDto.getLocationX(), textFieldDto.getLocationY());
+        jTextField.setSize(textFieldDto.getSizeWidth(), textFieldDto.getSizeHeight());
+        jTextField.setFont(new Font(textFieldDto.getTextFont(), Font.PLAIN, textFieldDto.getTextFontSize()));
+        return jTextField;
     }
 
 }

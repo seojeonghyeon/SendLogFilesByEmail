@@ -6,11 +6,7 @@ public class MainController {
 
     MainFrame mainFrame;
 
-    public void access(){
-        createGUI();
-    }
-    private void createGUI(){
+    public MainController() {
         mainFrame = MainFrame.getInstance();
     }
-
 }

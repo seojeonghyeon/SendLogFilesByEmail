@@ -3,7 +3,7 @@ package dto;
 import java.awt.*;
 
 public class TextLabelDto {
-    private String text;
+    private String textValue;
     private int locationX;
     private int locationY;
     private int sizeWidth;
@@ -12,9 +12,9 @@ public class TextLabelDto {
     private int textFontSize;
     private Color textFontColor;
 
-    public TextLabelDto(String text, int locationX, int locationY, int sizeWidth, int sizeHeight, String textFont,
+    public TextLabelDto(String textValue, int locationX, int locationY, int sizeWidth, int sizeHeight, String textFont,
                         int textFontSize, Color textFontColor){
-        this.text = text;
+        this.textValue = textValue;
         this.locationX = locationX;
         this.locationY = locationY;
         this.sizeWidth = sizeWidth;
@@ -25,7 +25,7 @@ public class TextLabelDto {
     }
 
     public String getText(){
-        return text;
+        return textValue;
     }
     public int getLocationX(){
         return locationX;
@@ -39,7 +39,7 @@ public class TextLabelDto {
 
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(text+"  location(x/y):"+locationX+"/"+locationY
+        stringBuilder.append(textValue+"  location(x/y):"+locationX+"/"+locationY
                 +"  size(weight/height):"+sizeWidth+"/"+sizeHeight
                 +"  textFont(name/size/color):"+textFont+"/"+textFontSize+"/"+textFontColor);
         return stringBuilder.toString();
