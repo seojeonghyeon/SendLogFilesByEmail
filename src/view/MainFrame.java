@@ -116,20 +116,24 @@ public class MainFrame extends JFrame{
 
     private void createLabel(){
         textLabelDtos = new TextLabelDto[]{
-                new TextLabelDto("Location    : ", 30, 50, 180, 20,
+                new TextLabelDto("Location    : ", 30, 50, 100, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextLabelDto("송신 메일 주소 : ", 30, 100, 180, 20,
+                new TextLabelDto("송신 메일 주소 : ", 30, 100, 100, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextLabelDto("Password    : ", 30, 150, 180, 20,
+                new TextLabelDto("Password    : ", 30, 150, 100, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextLabelDto("수신 메일 주소 : ", 30, 200, 180, 20,
+                new TextLabelDto("수신 메일 주소 : ", 30, 200, 100, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextLabelDto("시간마다 메일 전송", 100, 250, 180, 20,
+                new TextLabelDto("시간마다 메일 전송", 100, 250, 100, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
                 new TextLabelDto("이슈 발생시, 메일 전송(에러, 종료)", 60, 300, 200, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
                 new TextLabelDto(versionName, 450, 450, 50, 20,
-                        defaultFontName, defaultFontSize, defaultFontColor)
+                        defaultFontName, defaultFontSize, defaultFontColor),
+                new TextLabelDto("다음 전송 시간은 ", 140, 400, 100, 20,
+                        defaultFontName, defaultFontSize, Color.BLUE),
+                new TextLabelDto("2022.04.05 00:00", 250, 400, 120, 20,
+                        defaultFontName, defaultFontSize, Color.BLUE)
         };
         for (int i=0; i<textLabelDtos.length; ++i){
             JLabel jLabel = createLabel(textLabelDtos[i]);
@@ -139,6 +143,8 @@ public class MainFrame extends JFrame{
 
     private JLabel createLabel(TextLabelDto textLabel){
         JLabel jLabel = new JLabel(textLabel.getText());
+        jLabel.setOpaque(true);
+        jLabel.setForeground(textLabel.getTextFontColor());
         jLabel.setLocation(textLabel.getLocationX(), textLabel.getLocationY());
         jLabel.setSize(textLabel.getSizeWidth(), textLabel.getSizeHeight());
         jLabel.setFont(new Font(textLabel.getTextFont(), Font.PLAIN, textLabel.getTextFontSize()));
