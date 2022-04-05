@@ -2,8 +2,8 @@ package dto;
 
 import java.awt.*;
 
-public class TextFieldDto {
-    private String textValue;
+public class ButtonDto {
+    private String buttonTextValue;
     private int locationX;
     private int locationY;
     private int sizeWidth;
@@ -12,13 +12,9 @@ public class TextFieldDto {
     private int textFontSize;
     private Color textFontColor;
 
-    public TextFieldDto(String textValue){
-        this.textValue = textValue;
-    }
-
-    public TextFieldDto(String textValue,int locationX, int locationY, int sizeWidth, int sizeHeight, String textFont,
+    public ButtonDto(String buttonTextValue,int locationX, int locationY, int sizeWidth, int sizeHeight, String textFont,
                         int textFontSize, Color textFontColor){
-        this.textValue = textValue;
+        this.buttonTextValue = buttonTextValue;
         this.locationX = locationX;
         this.locationY = locationY;
         this.sizeWidth = sizeWidth;
@@ -28,8 +24,8 @@ public class TextFieldDto {
         this.textFontColor = textFontColor;
     }
 
-    public String getTextValue(){
-        return textValue;
+    public String getButtonTextValue(){
+        return buttonTextValue;
     }
     public int getLocationX(){
         return locationX;
@@ -55,7 +51,7 @@ public class TextFieldDto {
 
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(textValue+"  location(x/y):"+locationX+"/"+locationY
+        stringBuilder.append(buttonTextValue+"  location(x/y):"+locationX+"/"+locationY
                 +"  size(weight/height):"+sizeWidth+"/"+sizeHeight
                 +"  textFont(name/size/color):"+textFont+"/"+textFontSize+"/"+textFontColor);
         return stringBuilder.toString();
