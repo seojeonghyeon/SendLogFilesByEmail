@@ -7,24 +7,24 @@ import service.email.EmailService;
 import service.email.EmailServiceImpl;
 import service.savefile.SaveFileService;
 import service.savefile.SaveFileServiceImpl;
+import service.timer.TimerService;
+import service.timer.TimerServiceImpl;
 import view.dialog.SearchDialog;
-
 import javax.swing.*;
-import java.io.File;
 import java.util.LinkedList;
 
 public class MouseSwitchServiceImpl implements MouseSwitchService{
     private volatile static MouseSwitchServiceImpl uniqueInstance;
 
     private SaveFileService saveFileService;
-    private EmailService emailService;
     private SearchDialog searchDialog;
+    private TimerService timerService;
 
     private JPanelPackageDto jPanelPackageDto;
     private JLabel[] jLabels;
     private JTextField[] jTextFields;
     private JCheckBox[] jCheckBoxes;
-
+    private JButton[] jButtons;
 
     public static MouseSwitchServiceImpl getInstance(){
         if(uniqueInstance == null){
@@ -41,11 +41,12 @@ public class MouseSwitchServiceImpl implements MouseSwitchService{
         this.jLabels = jPanelPackageDto.getjLabels();
         this.jTextFields = jPanelPackageDto.getjTextFields();
         this.jCheckBoxes = jPanelPackageDto.getjCheckBoxes();
+        this.jButtons = jPanelPackageDto.getjButtons();
 
         if(number == 1) searchLogFiles();
         else if(number == 2) loadSaveFile();
         else if(number == 3) playSendEmail();
-        else if(number == 4) saveSaveFile();
+        else if(number == 4) pauseSendEmail();
     }
 
     private void searchLogFiles(){
@@ -62,15 +63,26 @@ public class MouseSwitchServiceImpl implements MouseSwitchService{
     }
 
     private void playSendEmail(){
+        playButtonDisabled();
+        timerService = TimerServiceImpl.getInstance();
+        timerService.startEmailSend(jPanelPackageDto);
+    }
 
-        LinkedList<String> filePaths = new LinkedList<>();
-        filePaths.add(jTextFields[0].getText());
-        EmailDto emailDto = new EmailDto(
-                jTextFields[1].getText(), jTextFields[2].getText(),
-                jTextFields[3].getText(), filePaths, "Regular"
-        );
-        emailService = EmailServiceImpl.getInstance();
-        emailService.sendEmail(emailDto);
+    private void playButtonDisabled(){
+        for(int i=0; i<jButtons.length-1; ++i)
+            jButtons[i].setEnabled(false);
+    }
+
+    private void pauseButtonDisabled(){
+        for(int i=0; i<jButtons.length-1; ++i)
+            jButtons[i].setEnabled(true);
+    }
+
+    private void pauseSendEmail(){
+        pauseButtonDisabled();
+        saveSaveFile();
+        timerService = TimerServiceImpl.getInstance();
+        timerService.stopEmailSend();
     }
 
     private void saveSaveFile(){

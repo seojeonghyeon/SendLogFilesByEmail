@@ -26,6 +26,7 @@ public class BasicPanelImpl implements BasicPanel {
     private JTextField[] jTextFields;
     private JCheckBox[] jCheckBoxes;
     private JLabel[] jLabels;
+    private JButton[] jButtons;
     private JPanelPackageDto jPanelPackageDto;
 
     public static BasicPanelImpl getInstance(Container container){
@@ -82,13 +83,18 @@ public class BasicPanelImpl implements BasicPanel {
                 new ButtonDto("Pause", 350, 350, 50, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
         };
-        jPanelPackageDto = new JPanelPackageDto(jLabels, jTextFields, jCheckBoxes);
+        jButtons = new JButton[buttonDtos.length];
 
         for (int i=0; i<buttonDtos.length; ++i){
-            JButton jButton = createButton(buttonDtos[i]);
-            jButton.addMouseListener(BasicMouseListener.getInstance(jPanelPackageDto));
-            container.add(jButton);
+            jButtons[i] = createButton(buttonDtos[i]);
+            container.add(jButtons[i]);
         }
+
+        jPanelPackageDto = new JPanelPackageDto(jLabels, jTextFields, jCheckBoxes);
+        jPanelPackageDto.setjButtons(jButtons);
+
+        for (int i=0; i<jButtons.length; ++i)
+            jButtons[i].addMouseListener(BasicMouseListener.getInstance(jPanelPackageDto));
 
     }
     private JButton createButton(ButtonDto buttonDto){
