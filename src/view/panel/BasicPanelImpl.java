@@ -1,16 +1,14 @@
-package view;
+package view.panel;
 
-import dto.ButtonDto;
-import dto.CheckBoxDto;
-import dto.TextFieldDto;
-import dto.TextLabelDto;
+import dto.*;
+import listener.basic.BasicMouseListener;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainPanelImpl implements MainPanel{
+public class BasicPanelImpl implements BasicPanel {
 
-    private volatile static MainPanelImpl uniqueInstance;
+    private volatile static BasicPanelImpl uniqueInstance;
     private Container container;
 
     private static final int titleFontSize = 16;
@@ -25,11 +23,16 @@ public class MainPanelImpl implements MainPanel{
     private ButtonDto[] buttonDtos;
     private CheckBoxDto[] checkBoxDtos;
 
-    public static MainPanelImpl getInstance(Container container){
+    private JTextField[] jTextFields;
+    private JCheckBox[] jCheckBoxes;
+    private JLabel[] jLabels;
+    private JPanelPackageDto jPanelPackageDto;
+
+    public static BasicPanelImpl getInstance(Container container){
         if(uniqueInstance == null){
-            synchronized (MainFrame.class){
+            synchronized (BasicPanelImpl.class){
                 if(uniqueInstance == null) {
-                    uniqueInstance = new MainPanelImpl();
+                    uniqueInstance = new BasicPanelImpl();
                     uniqueInstance.container = container;
                 }
             }
@@ -42,8 +45,8 @@ public class MainPanelImpl implements MainPanel{
         container.setLayout(null);
         createLabel();
         createTextField();
-        createButton();
         createCheckBox();
+        createButton();
     }
 
     private void createCheckBox(){
@@ -52,9 +55,11 @@ public class MainPanelImpl implements MainPanel{
                 new CheckBoxDto(false, 30, 300, 25, 20)
         };
 
+        jCheckBoxes = new JCheckBox[checkBoxDtos.length];
+
         for (int i=0; i<checkBoxDtos.length; ++i){
-            JCheckBox jCheckBox = createCheckBox(checkBoxDtos[i]);
-            container.add(jCheckBox);
+            jCheckBoxes[i] =  createCheckBox(checkBoxDtos[i]);
+            container.add(jCheckBoxes[i]);
         }
     }
 
@@ -77,9 +82,11 @@ public class MainPanelImpl implements MainPanel{
                 new ButtonDto("Pause", 350, 350, 50, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
         };
+        jPanelPackageDto = new JPanelPackageDto(jLabels, jTextFields, jCheckBoxes);
 
         for (int i=0; i<buttonDtos.length; ++i){
             JButton jButton = createButton(buttonDtos[i]);
+            jButton.addMouseListener(BasicMouseListener.getInstance(jPanelPackageDto));
             container.add(jButton);
         }
 
@@ -114,9 +121,11 @@ public class MainPanelImpl implements MainPanel{
                 new TextLabelDto("2022.04.05 00:00", 250, 400, 120, 20,
                         defaultFontName, defaultFontSize, Color.BLUE)
         };
+        jLabels = new JLabel[textLabelDtos.length];
+
         for (int i=0; i<textLabelDtos.length; ++i){
-            JLabel jLabel = createLabel(textLabelDtos[i]);
-            container.add(jLabel);
+            jLabels[i] = createLabel(textLabelDtos[i]);
+            container.add(jLabels[i]);
         }
     }
 
@@ -144,9 +153,11 @@ public class MainPanelImpl implements MainPanel{
                         defaultFontName, defaultFontSize, defaultFontColor)
         };
 
+        jTextFields = new JTextField[textFieldDtos.length];
+
         for (int i=0; i<textFieldDtos.length; ++i){
-            JTextField jTextField = createTextField(textFieldDtos[i]);
-            container.add(jTextField);
+            jTextFields[i] = createTextField(textFieldDtos[i]);
+            container.add(jTextFields[i]);
         }
     }
 

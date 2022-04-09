@@ -1,11 +1,25 @@
-package service;
+package service.savefile;
 
 import dto.TextFieldDto;
+import service.mouseswitch.MouseSwitchServiceImpl;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class SaveFileServiceImpl implements SaveFileService{
-    private static final String saveFileTextFieldLocation = "/resource/savefile.txt";
+public class SaveFileServiceImpl implements SaveFileService {
+    private static final String saveFileTextFieldLocation = "src/resource/savefile.txt";
+
+    private volatile static SaveFileServiceImpl uniqueInstance;
+
+    public static SaveFileServiceImpl getInstance(){
+        if(uniqueInstance == null){
+            synchronized (SaveFileServiceImpl.class){
+                if(uniqueInstance == null) uniqueInstance = new SaveFileServiceImpl();
+            }
+        }
+        return uniqueInstance;
+    }
 
     @Override
     public TextFieldDto[] readSaveFileForTextField(int countTextField) {
@@ -14,6 +28,7 @@ public class SaveFileServiceImpl implements SaveFileService{
 
     private TextFieldDto[] getSaveFileForTextField(int countTextField){
         TextFieldDto[] textFieldDtos = new TextFieldDto[countTextField];
+        for(int i=0; i<countTextField; ++i) textFieldDtos[i]= new TextFieldDto("");
         try {
             File file = new File(saveFileTextFieldLocation);
             FileReader fileReader = new FileReader(file);
@@ -22,14 +37,12 @@ public class SaveFileServiceImpl implements SaveFileService{
             String line = "";
             int i=0;
             while((line = bufferedReader.readLine()) != null){
-                textFieldDtos[i] = new TextFieldDto(line);
+                textFieldDtos[i].setTextValue(line);
                 ++i;
             }
         }catch (FileNotFoundException e){
-            for(int i=0; i<countTextField; ++i) textFieldDtos[i]= new TextFieldDto("");
         }catch (IOException e){
             System.out.println(e);
-            for(int i=0; i<countTextField; ++i) textFieldDtos[i]= new TextFieldDto("");
         }
         return textFieldDtos;
     }
@@ -43,11 +56,18 @@ public class SaveFileServiceImpl implements SaveFileService{
         try {
             File file = new File(saveFileTextFieldLocation);
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+
+            if(!file.exists()) file.createNewFile();
+
             if(file.isFile() && file.canWrite()){
+
                 for(int i=0; i<textFieldDtos.length; ++i){
                     bufferedWriter.write(textFieldDtos[i].getTextValue());
                     if(i != textFieldDtos.length-1) bufferedWriter.newLine();
                 }
+
+                bufferedWriter.flush();
+                bufferedWriter.close();
             }
         }catch(IOException e){
             System.out.println(e);

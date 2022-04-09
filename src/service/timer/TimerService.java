@@ -1,4 +1,4 @@
-package service;
+package service.timer;
 
 
 public interface TimerService {

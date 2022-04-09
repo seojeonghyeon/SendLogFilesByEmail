@@ -1,7 +1,7 @@
-package view;
+package view.panel;
 
 import java.awt.*;
 
-public interface MainPanel {
+public interface BasicPanel {
     public void createMainPanel();
 }

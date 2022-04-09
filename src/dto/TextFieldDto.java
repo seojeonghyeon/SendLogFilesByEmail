@@ -28,6 +28,8 @@ public class TextFieldDto {
         this.textFontColor = textFontColor;
     }
 
+
+    public void setTextValue(String textValue){this.textValue = textValue;}
     public String getTextValue(){
         return textValue;
     }
