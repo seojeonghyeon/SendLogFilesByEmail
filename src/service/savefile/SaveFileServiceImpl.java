@@ -35,7 +35,7 @@ public class SaveFileServiceImpl implements SaveFileService {
 
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line = "";
-            int i=0;
+            int i=1;
             while((line = bufferedReader.readLine()) != null){
                 textFieldDtos[i].setTextValue(line);
                 ++i;
@@ -61,7 +61,7 @@ public class SaveFileServiceImpl implements SaveFileService {
 
             if(file.isFile() && file.canWrite()){
 
-                for(int i=0; i<textFieldDtos.length; ++i){
+                for(int i=1; i<textFieldDtos.length; ++i){
                     bufferedWriter.write(textFieldDtos[i].getTextValue());
                     if(i != textFieldDtos.length-1) bufferedWriter.newLine();
                 }

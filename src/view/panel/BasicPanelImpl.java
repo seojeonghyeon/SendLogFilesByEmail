@@ -141,15 +141,15 @@ public class BasicPanelImpl implements BasicPanel {
 
     private void createTextField(){
         textFieldDtos = new TextFieldDto[]{
-                new TextFieldDto("파일 위치", 150, 50, 250, 20,
+                new TextFieldDto("", 150, 50, 250, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextFieldDto("example@gmail.com", 150, 100, 250, 20,
+                new TextFieldDto("", 150, 100, 250, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextFieldDto("P@ssw0rd!", 150, 150, 250, 20,
+                new TextFieldDto("", 150, 150, 250, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextFieldDto("example@naver.com", 150, 200, 250, 20,
+                new TextFieldDto("", 150, 200, 250, 20,
                         defaultFontName, defaultFontSize, defaultFontColor),
-                new TextFieldDto("6", 60, 250, 40, 20,
+                new TextFieldDto("", 60, 250, 40, 20,
                         defaultFontName, defaultFontSize, defaultFontColor)
         };
 

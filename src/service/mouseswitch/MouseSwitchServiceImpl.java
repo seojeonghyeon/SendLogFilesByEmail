@@ -7,19 +7,24 @@ import service.email.EmailService;
 import service.email.EmailServiceImpl;
 import service.savefile.SaveFileService;
 import service.savefile.SaveFileServiceImpl;
+import view.dialog.SearchDialog;
 
 import javax.swing.*;
+import java.io.File;
+import java.util.LinkedList;
 
 public class MouseSwitchServiceImpl implements MouseSwitchService{
     private volatile static MouseSwitchServiceImpl uniqueInstance;
 
     private SaveFileService saveFileService;
     private EmailService emailService;
+    private SearchDialog searchDialog;
 
     private JPanelPackageDto jPanelPackageDto;
     private JLabel[] jLabels;
     private JTextField[] jTextFields;
     private JCheckBox[] jCheckBoxes;
+
 
     public static MouseSwitchServiceImpl getInstance(){
         if(uniqueInstance == null){
@@ -37,24 +42,18 @@ public class MouseSwitchServiceImpl implements MouseSwitchService{
         this.jTextFields = jPanelPackageDto.getjTextFields();
         this.jCheckBoxes = jPanelPackageDto.getjCheckBoxes();
 
-        //1 : Search
-        //2 : Load
-        //3 : Play
-        //4 : Pause
-        if(number == 1){
-            searchLogFiles();
-        }else if(number == 2){
-            loadSaveFile();
-        }else if(number == 3){
-            playSendEmail();
-        }else if(number == 4){
-            saveSaveFile();
-        }
+        if(number == 1) searchLogFiles();
+        else if(number == 2) loadSaveFile();
+        else if(number == 3) playSendEmail();
+        else if(number == 4) saveSaveFile();
     }
 
     private void searchLogFiles(){
-
+        searchDialog = SearchDialog.getInstance();
+        String getOpenPathName = searchDialog.getOpenPath();
+        jTextFields[0].setText(getOpenPathName);
     }
+
 
     private void loadSaveFile(){
         saveFileService = SaveFileServiceImpl.getInstance();
@@ -63,13 +62,15 @@ public class MouseSwitchServiceImpl implements MouseSwitchService{
     }
 
     private void playSendEmail(){
-        String[] filePaths = new String[1];
-        filePaths[0] = jTextFields[0].getText();
+
+        LinkedList<String> filePaths = new LinkedList<>();
+        filePaths.add(jTextFields[0].getText());
         EmailDto emailDto = new EmailDto(
                 jTextFields[1].getText(), jTextFields[2].getText(),
                 jTextFields[3].getText(), filePaths, "Regular"
         );
-        emailService = EmailServiceImpl.getInstance(emailDto);
+        emailService = EmailServiceImpl.getInstance();
+        emailService.sendEmail(emailDto);
     }
 
     private void saveSaveFile(){

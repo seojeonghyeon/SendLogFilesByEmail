@@ -6,6 +6,8 @@ import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.io.File;
+import java.util.LinkedList;
 import java.util.Properties;
 
 /*
@@ -20,68 +22,77 @@ import java.util.Properties;
 public class EmailServiceImpl implements EmailService{
 
     private volatile static EmailServiceImpl uniqueInstance;
-    private Properties prop;
     private Session session;
 
     private static final String bodyEncoding = "UTF-8";
+    private LinkedList<String> getPaths;
 
-    public static EmailServiceImpl getInstance(EmailDto emailDto){
+    public static EmailServiceImpl getInstance(){
         if(uniqueInstance == null){
             synchronized (EmailServiceImpl.class){
-                if(uniqueInstance == null) uniqueInstance = new EmailServiceImpl(emailDto);
+                if(uniqueInstance == null) uniqueInstance = new EmailServiceImpl();
             }
         }
         return uniqueInstance;
     }
 
-    public EmailServiceImpl(EmailDto emailDto){
-        prop = new Properties();
-
-        prop.put("mail.transport.protocol", "smtp");
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", 465);
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.ssl.enable", "true");
-        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-        session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(emailDto.getSendEmail(), emailDto.getSendEmailPassword());
-            }
-        });
-
-    }
-
     @Override
     public void sendEmail(EmailDto emailDto) {
-
-        String[] attachedFiles = emailDto.getGetPaths();
-
-        MimeMessage message = new MimeMessage(session);
         try {
+            LinkedList<String> attachedFiles = emailDto.getGetPaths();
+            session = Session.getDefaultInstance(getProperties(), new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(emailDto.getSendEmail(), emailDto.getSendEmailPassword());
+                }
+            });
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailDto.getSendEmail()));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailDto.getReceiveEmail()));
             message.setSubject(emailDto.getTitleText());
             message.setText(emailDto.getBodyText(), bodyEncoding, "html");
 
-            MimeBodyPart attachPart = new MimeBodyPart();
+            MimeBodyPart attachPart;
             Multipart multipart = new MimeMultipart();
 
-            for (int i=0; i < attachedFiles.length; i++) {
-                FileDataSource fileDataSource = new FileDataSource(attachedFiles[i]);
-                attachPart = new MimeBodyPart();
-                attachPart.setDataHandler(new DataHandler(fileDataSource));
-                attachPart.setFileName(fileDataSource.getName());
-                multipart.addBodyPart(attachPart);
+            for (String attachedFile : attachedFiles) {
+                getFileList(attachedFile);
+                for(String filePath : getPaths) {
+                    FileDataSource fileDataSource = new FileDataSource(filePath);
+                    attachPart = new MimeBodyPart();
+                    attachPart.setDataHandler(new DataHandler(fileDataSource));
+                    attachPart.setFileName(fileDataSource.getName());
+                    multipart.addBodyPart(attachPart);
+                }
             }
-
+            message.setContent(multipart);
             Transport.send(message);
         } catch (AddressException e) {
             e.printStackTrace();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
-
     }
+    private void getFileList(String getOpenPathName){
+        getPaths = new LinkedList<>();
+        File getOpenPath = new File(getOpenPathName);
+        File[] fileList = getOpenPath.listFiles();
+        for(File file : fileList){
+            if(file.isFile()){
+                String getFilePath = file.getPath();
+                if(file.getName().charAt(0)!='.') {
+                    getPaths.add(getFilePath);
+                    System.out.println("fileName : " + getFilePath);
+                }
+            }
+        }
+    }
+    public Properties getProperties(){
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.auth","true");
+        properties.put("mail.smtp.port", "587");
+        return properties;
+    }
+
 }
