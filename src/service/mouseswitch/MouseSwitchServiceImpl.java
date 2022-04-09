@@ -1,7 +1,10 @@
 package service.mouseswitch;
 
+import dto.EmailDto;
 import dto.JPanelPackageDto;
 import dto.TextFieldDto;
+import service.email.EmailService;
+import service.email.EmailServiceImpl;
 import service.savefile.SaveFileService;
 import service.savefile.SaveFileServiceImpl;
 
@@ -11,6 +14,7 @@ public class MouseSwitchServiceImpl implements MouseSwitchService{
     private volatile static MouseSwitchServiceImpl uniqueInstance;
 
     private SaveFileService saveFileService;
+    private EmailService emailService;
 
     private JPanelPackageDto jPanelPackageDto;
     private JLabel[] jLabels;
@@ -28,32 +32,44 @@ public class MouseSwitchServiceImpl implements MouseSwitchService{
 
     @Override
     public void switchService(int number, JPanelPackageDto jPanelPackageDto) {
-        jLabels = jPanelPackageDto.getjLabels();
-        jTextFields = jPanelPackageDto.getjTextFields();
-        jCheckBoxes = jPanelPackageDto.getjCheckBoxes();
+        this.jPanelPackageDto = jPanelPackageDto;
+        this.jLabels = jPanelPackageDto.getjLabels();
+        this.jTextFields = jPanelPackageDto.getjTextFields();
+        this.jCheckBoxes = jPanelPackageDto.getjCheckBoxes();
 
         //1 : Search
         //2 : Load
         //3 : Play
         //4 : Pause
         if(number == 1){
-
+            searchLogFiles();
         }else if(number == 2){
             loadSaveFile();
         }else if(number == 3){
-
+            playSendEmail();
         }else if(number == 4){
             saveSaveFile();
         }
     }
 
+    private void searchLogFiles(){
+
+    }
+
     private void loadSaveFile(){
         saveFileService = SaveFileServiceImpl.getInstance();
         TextFieldDto[] textFieldDtos = saveFileService.readSaveFileForTextField(jTextFields.length);
-        for(int i=0; i<jTextFields.length; ++i) {
-            System.out.println(textFieldDtos[i].toString());
-            jTextFields[i].setText(textFieldDtos[i].getTextValue());
-        }
+        for(int i=0; i<jTextFields.length; ++i) jTextFields[i].setText(textFieldDtos[i].getTextValue());
+    }
+
+    private void playSendEmail(){
+        String[] filePaths = new String[1];
+        filePaths[0] = jTextFields[0].getText();
+        EmailDto emailDto = new EmailDto(
+                jTextFields[1].getText(), jTextFields[2].getText(),
+                jTextFields[3].getText(), filePaths, "Regular"
+        );
+        emailService = EmailServiceImpl.getInstance(emailDto);
     }
 
     private void saveSaveFile(){
