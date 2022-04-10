@@ -64,7 +64,7 @@ public class TimerServiceImpl implements TimerService {
         }
     }
     private void periodSendEmail(){
-        nextTime = LocalTime.now().plusMinutes(1);
+        nextTime = LocalTime.now().plusMinutes(5);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(nextTime.format(dateTimeFormatter));
         jLabels[jLabels.length-1].setText(stringBuilder.toString());
@@ -80,8 +80,9 @@ public class TimerServiceImpl implements TimerService {
             }
         };
         timer = new Timer("Timer");
-        int delay = 1000*30;
-        int period = 1000*60*60*Integer.parseInt(jTextFields[jTextFields.length-1].getText());
+        int delay = 1000*30*1;
+        int period = 1000*60*2;
+//                *Integer.parseInt(jTextFields[jTextFields.length-1].getText());
         timer.schedule(timerTask, delay, period);
     }
 

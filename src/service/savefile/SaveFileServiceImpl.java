@@ -4,7 +4,9 @@ import dto.TextFieldDto;
 import java.io.*;
 
 public class SaveFileServiceImpl implements SaveFileService {
-    private static final String saveFileTextFieldLocation = "src/resource/savefile.txt";
+//    private static final String saveFileTextFieldLocation = "/src/resource/savefile.txt";  //개발
+//    private static final String saveFileTextFieldLocation = "/Users/zayden/Downloads/resources/savefile.txt";   //검증 Version
+    private static final String saveFileTextFieldLocation = "C:/resources/savefile.txt";   //운영 Version
 
     private volatile static SaveFileServiceImpl uniqueInstance;
 
