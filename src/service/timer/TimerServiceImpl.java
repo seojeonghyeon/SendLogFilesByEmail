@@ -4,15 +4,12 @@ import dto.EmailDto;
 import dto.JPanelPackageDto;
 import service.email.EmailService;
 import service.email.EmailServiceImpl;
-import service.timer.TimerService;
 
 import javax.swing.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,29 +58,31 @@ public class TimerServiceImpl implements TimerService {
         if(jCheckBoxes[0].isSelected() && jCheckBoxes[1].isSelected()) {
 
         }else if(jCheckBoxes[0].isSelected() && !jCheckBoxes[1].isSelected()){
-            nextTime = LocalTime.now().plusMinutes(5);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(nextTime.format(dateTimeFormatter));
-            jLabels[jLabels.length-1].setText(stringBuilder.toString());
-
-            timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    sendEmail();
-
-                    nextTime = LocalTime.now();
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(nextTime.format(dateTimeFormatter));
-                    jLabels[jLabels.length-1].setText(stringBuilder.toString());
-                }
-            };
-            timer = new Timer("Timer");
-            int delay = 300000;
-            int period = 3600000*Integer.parseInt(jTextFields[jTextFields.length-1].getText());
-            timer.schedule(timerTask, delay, period);
+            periodSendEmail();
         }else if(!jCheckBoxes[0].isSelected() && jCheckBoxes[1].isSelected()){
 
         }
+    }
+    private void periodSendEmail(){
+        nextTime = LocalTime.now().plusMinutes(1);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(nextTime.format(dateTimeFormatter));
+        jLabels[jLabels.length-1].setText(stringBuilder.toString());
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                sendEmail();
+                nextTime = LocalTime.now().plusHours(Integer.parseInt(jTextFields[jTextFields.length-1].getText()));
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(nextTime.format(dateTimeFormatter));
+                jLabels[jLabels.length-1].setText(stringBuilder.toString());
+            }
+        };
+        timer = new Timer("Timer");
+        int delay = 1000*30;
+        int period = 1000*60*60*Integer.parseInt(jTextFields[jTextFields.length-1].getText());
+        timer.schedule(timerTask, delay, period);
     }
 
     private void sendEmail(){
@@ -91,7 +90,7 @@ public class TimerServiceImpl implements TimerService {
         filePaths.add(jTextFields[0].getText());
         EmailDto emailDto = new EmailDto(
                 jTextFields[1].getText(), jTextFields[2].getText(),
-                jTextFields[3].getText(), filePaths, "Regular"
+                jTextFields[3].getText(), filePaths, "정기"
         );
         emailService = EmailServiceImpl.getInstance();
         emailService.sendEmail(emailDto);

@@ -124,7 +124,7 @@ public class BasicPanelImpl implements BasicPanel {
                         defaultFontName, defaultFontSize, defaultFontColor),
                 new TextLabelDto("다음 전송 시간은 ", 140, 400, 100, 20,
                         defaultFontName, defaultFontSize, Color.BLUE),
-                new TextLabelDto("2022.04.05 00:00", 250, 400, 120, 20,
+                new TextLabelDto("", 250, 400, 120, 20,
                         defaultFontName, defaultFontSize, Color.BLUE)
         };
         jLabels = new JLabel[textLabelDtos.length];

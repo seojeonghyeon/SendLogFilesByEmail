@@ -36,8 +36,8 @@ public class EmailDto {
         StringBuilder stringBuilderBody = new StringBuilder();
         stringBuilderBody.append(
                 "<h2>"+nowDate+" "+nowTime.format(dateTimeFormatter)+"(한국 시간 기준) Log Files<h2>"+
-                        "<h4>[Regular] : 정기적인 수신<h4>" +
-                        "<h4>[Event] : 이벤트성 수신<h4>"
+                        "<h4>[정기] : 정기적인 수신<h4>" +
+                        "<h4>[이벤트] : 이벤트성 수신<h4>"
         );
         this.bodyText = stringBuilderBody.toString();
 

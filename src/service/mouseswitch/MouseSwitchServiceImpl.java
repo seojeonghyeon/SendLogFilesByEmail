@@ -1,17 +1,13 @@
 package service.mouseswitch;
 
-import dto.EmailDto;
 import dto.JPanelPackageDto;
 import dto.TextFieldDto;
-import service.email.EmailService;
-import service.email.EmailServiceImpl;
 import service.savefile.SaveFileService;
 import service.savefile.SaveFileServiceImpl;
 import service.timer.TimerService;
 import service.timer.TimerServiceImpl;
 import view.dialog.SearchDialog;
 import javax.swing.*;
-import java.util.LinkedList;
 
 public class MouseSwitchServiceImpl implements MouseSwitchService{
     private volatile static MouseSwitchServiceImpl uniqueInstance;

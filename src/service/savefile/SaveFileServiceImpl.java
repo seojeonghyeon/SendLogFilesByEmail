@@ -1,11 +1,7 @@
 package service.savefile;
 
 import dto.TextFieldDto;
-import service.mouseswitch.MouseSwitchServiceImpl;
-
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class SaveFileServiceImpl implements SaveFileService {
     private static final String saveFileTextFieldLocation = "src/resource/savefile.txt";

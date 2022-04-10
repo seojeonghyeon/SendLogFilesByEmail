@@ -1,7 +1,5 @@
 package service.timer;
 
-
-import dto.CheckBoxDto;
 import dto.JPanelPackageDto;
 
 public interface TimerService {
